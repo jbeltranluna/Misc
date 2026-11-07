@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Mis herramientas</title>
+<style>
+  :root { --bg:#f3f5fb; --card:#fff; --text:#1c2233; --muted:#6b7390; --border:#e1e5f0; --accent:#5b6cff; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0f1220; --card:#181c2f; --text:#eef0fa; --muted:#9aa2c4; --border:#2a3050; } }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px 20px; background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:440px; margin:0 auto; }
+  h1 { font-size:1.4rem; margin:8px 0 20px; }
+  a.tool { display:flex; align-items:center; gap:14px; padding:16px; margin-bottom:12px; background:var(--card); border:1px solid var(--border); border-radius:16px; color:inherit; text-decoration:none; }
+  a.tool:active { border-color:var(--accent); }
+  .ico { font-size:1.6rem; }
+  .tool b { display:block; }
+  .tool small { color:var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>🧰 Mis herramientas</h1>
+  <!-- Añade aquí una entrada por cada carpeta nueva -->
+  <a class="tool" href="generador-contrasenas/">
+    <span class="ico">🔐</span>
+    <span><b>Generador de contraseñas</b><small>Aleatorias y compatibles con casi cualquier web</small></span>
+  </a>
+</main>
+</body>
+</html>

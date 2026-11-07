@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Generador de contraseñas</title>
+<style>
+  :root {
+    --bg: #f3f5fb;
+    --card: #ffffff;
+    --text: #1c2233;
+    --muted: #6b7390;
+    --border: #e1e5f0;
+    --accent: #5b6cff;
+    --accent-2: #8a5bff;
+    --ok: #22a06b;
+    --shadow: 0 10px 30px rgba(40, 50, 100, .12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1220;
+      --card: #181c2f;
+      --text: #eef0fa;
+      --muted: #9aa2c4;
+      --border: #2a3050;
+      --shadow: 0 10px 30px rgba(0, 0, 0, .4);
+    }
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    background: radial-gradient(circle at 20% 0%, rgba(91,108,255,.18), transparent 50%), var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+  }
+  h1 { margin: 0 0 4px; font-size: 1.4rem; }
+  .sub { margin: 0 0 20px; color: var(--muted); font-size: .9rem; }
+
+  .output {
+    position: relative;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    min-height: 74px;
+    display: flex;
+    align-items: center;
+  }
+  #password {
+    width: 100%;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    word-break: break-all;
+    user-select: all;
+    -webkit-user-select: all;
+  }
+  .strength { margin: 14px 2px 20px; }
+  .bar { height: 6px; border-radius: 99px; background: var(--border); overflow: hidden; }
+  .bar span { display: block; height: 100%; width: 0; border-radius: 99px; transition: width .3s, background .3s; }
+  .strength small { display: block; margin-top: 6px; color: var(--muted); font-size: .8rem; }
+
+  .row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-weight: 600; }
+  .row output { color: var(--accent); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+  input[type=range] {
+    width: 100%; height: 6px; margin: 8px 0 22px;
+    accent-color: var(--accent);
+  }
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px; border: 1px solid var(--border); border-radius: 14px;
+    cursor: pointer; font-size: .92rem; user-select: none;
+    transition: border-color .15s, background .15s;
+  }
+  .opt:has(input:checked) { border-color: var(--accent); background: rgba(91,108,255,.08); }
+  .opt input { accent-color: var(--accent); width: 18px; height: 18px; margin: 0; }
+  .opt.full { grid-column: 1 / -1; }
+
+  .buttons { display: flex; gap: 10px; margin-top: 8px; }
+  button {
+    flex: 1; border: 0; border-radius: 14px; padding: 15px;
+    font-size: 1rem; font-weight: 600; cursor: pointer;
+    transition: transform .1s, opacity .15s;
+  }
+  button:active { transform: scale(.97); }
+  #copy { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  #copy.done { background: var(--ok); }
+  #regen { flex: 0 0 auto; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 15px 20px; }
+  .note { margin: 16px 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
+</style>
+</head>
+<body>
+  <main class="card">
+    <h1>🔐 Generador de contraseñas</h1>
+    <p class="sub">Aleatoria, segura y compatible con casi cualquier web.</p>
+
+    <div class="output"><div id="password" aria-live="polite"></div></div>
+
+    <div class="strength">
+      <div class="bar"><span id="barFill"></span></div>
+      <small id="strengthText"></small>
+    </div>
+
+    <div class="row"><label for="length">Longitud</label><output id="lengthOut">16</output></div>
+    <input type="range" id="length" min="8" max="40" value="16">
+
+    <div class="options">
+      <label class="opt"><input type="checkbox" id="lower" checked> Minúsculas</label>
+      <label class="opt"><input type="checkbox" id="upper" checked> Mayúsculas</label>
+      <label class="opt"><input type="checkbox" id="digits" checked> Números</label>
+      <label class="opt"><input type="checkbox" id="symbols" checked> Símbolos</label>
+      <label class="opt full"><input type="checkbox" id="ambiguous" checked> Evitar caracteres ambiguos (0 O o 1 l I)</label>
+    </div>
+
+    <div class="buttons">
+      <button id="regen" title="Generar otra" aria-label="Generar otra">↻</button>
+      <button id="copy">Copiar contraseña</button>
+    </div>
+
+    <p class="note">Se genera en tu dispositivo y no se guarda en ningún sitio.<br>Símbolos usados: ! @ # $ % & * - _ + = ?</p>
+  </main>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const sets = {
+    lower: "abcdefghijklmnopqrstuvwxyz",
+    upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    digits: "0123456789",
+    symbols: "!@#$%&*-_+=?"
+  };
+  const AMBIGUOUS = /[0Oo1lI]/g;
+
+  // Entero aleatorio uniforme en [0, max) sin sesgo de módulo
+  function randInt(max) {
+    const limit = Math.floor(0x100000000 / max) * max;
+    const buf = new Uint32Array(1);
+    do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
+    return buf[0] % max;
+  }
+
+  function getPools() {
+    const pools = [];
+    for (const key of Object.keys(sets)) {
+      if (!$(key).checked) continue;
+      let chars = sets[key];
+      if ($("ambiguous").checked) chars = chars.replace(AMBIGUOUS, "");
+      pools.push({ key, chars });
+    }
+    return pools;
+  }
+
+  function generate() {
+    const pools = getPools();
+    if (!pools.length) {
+      $("lower").checked = true;
+      return generate();
+    }
+    const len = +$("length").value;
+    const all = pools.map(p => p.chars).join("");
+    const out = pools.map(p => p.chars[randInt(p.chars.length)]); // al menos uno de cada tipo
+    while (out.length < len) out.push(all[randInt(all.length)]);
+
+    // Fisher-Yates
+    for (let i = out.length - 1; i > 0; i--) {
+      const j = randInt(i + 1);
+      [out[i], out[j]] = [out[j], out[i]];
+    }
+    // Empezar por letra (algunas webs rechazan empezar por símbolo o número)
+    if (!/[a-zA-Z]/.test(out[0])) {
+      const k = out.findIndex(c => /[a-zA-Z]/.test(c));
+      if (k > 0) [out[0], out[k]] = [out[k], out[0]];
+    }
+    show(out.join(""), all.length, len);
+  }
+
+  function show(pwd, poolSize, len) {
+    $("password").textContent = pwd;
+    const bits = len * Math.log2(poolSize);
+    let pct, color, label;
+    if (bits < 50)       { pct = 25;  color = "#e5484d"; label = "Débil"; }
+    else if (bits < 70)  { pct = 50;  color = "#f5a524"; label = "Aceptable"; }
+    else if (bits < 100) { pct = 75;  color = "#7bc043"; label = "Fuerte"; }
+    else                 { pct = 100; color = "#22a06b"; label = "Muy fuerte"; }
+    $("barFill").style.width = pct + "%";
+    $("barFill").style.background = color;
+    $("strengthText").textContent = `${label} · ${Math.round(bits)} bits de entropía`;
+    resetCopy();
+  }
+
+  let timer;
+  function resetCopy() {
+    clearTimeout(timer);
+    $("copy").textContent = "Copiar contraseña";
+    $("copy").classList.remove("done");
+  }
+
+  async function copy() {
+    const text = $("password").textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      document.execCommand("copy");
+      ta.remove();
+    }
+    $("copy").textContent = "✓ ¡Copiada!";
+    $("copy").classList.add("done");
+    clearTimeout(timer);
+    timer = setTimeout(resetCopy, 1800);
+  }
+
+  $("length").addEventListener("input", () => { $("lengthOut").textContent = $("length").value; generate(); });
+  ["lower", "upper", "digits", "symbols", "ambiguous"].forEach(id => $(id).addEventListener("change", generate));
+  $("regen").addEventListener("click", generate);
+  $("copy").addEventListener("click", copy);
+
+  generate();
+})();
+</script>
+</body>
+</html>
