@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tabla GDPR</title>
+<style>
+  :root { --bg:#f6f7f9; --fg:#1d2330; --muted:#6b7385; --line:#d9dde5; --card:#fff; --acc:#2557d6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14171d; --fg:#e6e9ef; --muted:#8c94a6; --line:#2d3340; --card:#1c2029; --acc:#6b93ff; }
+  }
+  body { margin:0; padding:24px; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui,sans-serif; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  .bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:12px 0 16px; }
+  button { font:inherit; padding:6px 12px; border:1px solid var(--line); background:var(--card); color:var(--fg); border-radius:6px; cursor:pointer; }
+  button:hover { border-color:var(--acc); }
+  button.primary { background:var(--acc); color:#fff; border-color:var(--acc); }
+  #status { color:var(--muted); margin-left:auto; }
+  .wrap { overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:8px; }
+  table { border-collapse:collapse; width:100%; min-width:1200px; table-layout:fixed; }
+  th { text-align:left; padding:8px; border-bottom:1px solid var(--line); color:var(--muted); font-weight:600; }
+  td { padding:2px; border-bottom:1px solid var(--line); vertical-align:top; }
+  td textarea { display:block; width:100%; box-sizing:border-box; border:1px solid transparent; background:transparent; color:inherit; font:inherit; padding:6px; border-radius:4px; resize:none; overflow:hidden; overflow-wrap:anywhere; field-sizing:content; }
+  td textarea:focus { outline:none; border-color:var(--acc); background:var(--bg); }
+  td.del { text-align:center; }
+  td.del button { border:none; background:none; color:var(--muted); padding:4px 8px; }
+  td.del button:hover { color:#d33; }
+  .hint { color:var(--muted); font-size:12px; margin-top:12px; }
+  [hidden] { display:none !important; }
+  tr.filters th { padding:4px; font-weight:400; }
+  tr.filters input, tr.filters select { width:100%; box-sizing:border-box; font:inherit; font-size:13px; padding:4px; border:1px solid var(--line); border-radius:4px; background:var(--bg); color:var(--fg); }
+  .c-vacio { --c:#8a93a6; } .c-via { --c:#e8590c; } .c-preparado { --c:#e0a800; } .c-solicitado { --c:#2f7de1; }
+  .c-confirmado { --c:#7c4dff; } .c-completado { --c:#2f9e44; } .c-rechazado { --c:#e03131; } .c-otro { --c:#d6336c; }
+  tbody tr td { background:color-mix(in srgb, var(--c) 13%, transparent); }
+  tbody tr td:first-child { box-shadow:inset 4px 0 var(--c); }
+  #legend { display:flex; gap:6px 14px; flex-wrap:wrap; align-items:center; margin:0 0 12px; font-size:13px; }
+  #legend .chip::before { content:""; display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--c); margin-right:5px; }
+  #count { color:var(--muted); margin-left:auto; }
+  .view { display:flex; gap:4px; align-items:flex-start; padding:7px; }
+  .view a { flex:1; min-width:0; color:var(--acc); overflow-wrap:anywhere; }
+  .view button { border:none; background:none; color:var(--muted); padding:0 2px; }
+  .view button:hover { color:var(--acc); }
+</style>
+</head>
+<body>
+<h1>Solicitudes de borrado de datos (GDPR)</h1>
+<div class="hint">Los datos viven en <code>sitios.json</code> (misma carpeta). Nada se sube a ningún sitio.</div>
+
+<div class="bar">
+  <button id="btnOpen" class="primary">Conectar con sitios.json</button>
+  <button id="btnAdd">+ Añadir fila</button>
+  <button id="btnReload">Recargar del archivo</button>
+  <button id="btnExport">Exportar copia</button>
+  <button id="btnClear">Limpiar filtros</button>
+  <span id="status">Sin conectar</span>
+</div>
+
+<div id="legend"></div>
+
+<div class="wrap">
+<table>
+  <thead><tr>
+    <th style="width:12%">Sitio</th><th style="width:34%">Descripción del sitio</th><th style="width:7%">Usuario</th><th style="width:15%">Mail</th><th style="width:12%">Acción</th><th>Estado</th><th style="width:36px"></th>
+  </tr><tr class="filters" id="filters"></tr></thead>
+  <tbody id="tbody"></tbody>
+</table>
+</div>
+
+<script>
+const FIELDS = ["sitio","descripcion","usuario","mail","accion","estado"];
+let rows = [];
+let handle = null;
+let saveTimer = null;
+let lastModified = 0;
+
+const $ = id => document.getElementById(id);
+const setStatus = t => $("status").textContent = t;
+
+// --- guardar el handle del archivo en IndexedDB para reconectar sin volver a elegirlo
+const idb = () => new Promise((res, rej) => {
+  const r = indexedDB.open("gdpr", 1);
+  r.onupgradeneeded = () => r.result.createObjectStore("kv");
+  r.onsuccess = () => res(r.result);
+  r.onerror = () => rej(r.error);
+});
+async function kvGet(k) { try { const db = await idb(); return await new Promise(res => { const q = db.transaction("kv").objectStore("kv").get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(null); }); } catch { return null; } }
+async function kvSet(k, v) { try { const db = await idb(); db.transaction("kv","readwrite").objectStore("kv").put(v, k); } catch {} }
+
+const norm = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+// --- categorías de estado: dan el color de la fila y las opciones del filtro
+const CATS = [
+  ["vacio", "Sin solicitar"], ["via", "Sin vía de borrado clara"], ["preparado", "Mail preparado"],
+  ["solicitado", "Solicitado"], ["confirmado", "Confirmado, pte contraseña"], ["completado", "Completado"],
+  ["rechazado", "Rechazado"], ["otro", "Otro"]
+];
+function catOf(estado) {
+  const s = norm(estado).trim();
+  if (!s || s.startsWith("pendiente")) return "vacio";
+  if (s.includes("pte borrar contrasena") || s.startsWith("confirmado")) return "confirmado";
+  if (s.startsWith("completado")) return "completado";
+  if (s.startsWith("rechazado")) return "rechazado";
+  if (s.startsWith("solicitado")) return "solicitado";
+  if (s.includes("preparado")) return "preparado";
+  if (/^via|sin localizar|sin confirmar|borrado desde/.test(s)) return "via";
+  return "otro";
+}
+
+// --- solo enlaces http(s); lo que no parezca una web se queda como texto
+function hrefOf(v) {
+  const s = (v || "").trim();
+  if (/^https?:\/\/\S+$/i.test(s)) return s;
+  if (/^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(s)) return "https://" + s;
+  return null;
+}
+
+// --- filtros por columna
+const FILTER_TYPE = { sitio:"text", descripcion:"text", usuario:"text", mail:"values", accion:"values", estado:"cat" };
+const EMPTY = "__vacio__";
+function buildFilters() {
+  const tr = $("filters");
+  FIELDS.forEach(f => {
+    const th = document.createElement("th");
+    const c = document.createElement(FILTER_TYPE[f] === "text" ? "input" : "select");
+    c.id = "f-" + f;
+    if (FILTER_TYPE[f] === "text") c.placeholder = "Filtrar…";
+    c.addEventListener("input", applyFilters);
+    th.appendChild(c); tr.appendChild(th);
+  });
+  tr.appendChild(document.createElement("th"));
+}
+function setOptions(sel, opts) {
+  const cur = sel.value;
+  sel.innerHTML = "";
+  [["", "Todos"], ...opts].forEach(([v, t]) => sel.add(new Option(t, v)));
+  sel.value = opts.some(o => o[0] === cur) ? cur : "";
+}
+function refreshFilters() {
+  FIELDS.filter(f => FILTER_TYPE[f] === "values").forEach(f => {
+    const vals = [...new Set(rows.map(r => r[f].trim()))].sort((a, b) => a.localeCompare(b));
+    setOptions($("f-" + f), vals.map(v => v ? [v, v] : [EMPTY, "(vacío)"]));
+  });
+  const n = {};
+  rows.forEach(r => { const c = catOf(r.estado); n[c] = (n[c] || 0) + 1; });
+  const used = CATS.filter(([id]) => n[id]);
+  setOptions($("f-estado"), used.map(([id, t]) => [id, t + " (" + n[id] + ")"]));
+  const lg = $("legend");
+  lg.innerHTML = "";
+  used.forEach(([id, t]) => {
+    const s = document.createElement("span");
+    s.className = "chip c-" + id;
+    s.textContent = t + ": " + n[id];
+    lg.appendChild(s);
+  });
+  const cnt = document.createElement("span");
+  cnt.id = "count";
+  lg.appendChild(cnt);
+}
+function matches(row) {
+  return FIELDS.every(f => {
+    const v = $("f-" + f).value;
+    if (!v) return true;
+    if (FILTER_TYPE[f] === "cat") return catOf(row[f]) === v;
+    if (FILTER_TYPE[f] === "values") return row[f].trim() === (v === EMPTY ? "" : v);
+    return norm(row[f]).includes(norm(v));
+  });
+}
+function applyFilters() {
+  let shown = 0;
+  [...$("tbody").children].forEach((tr, i) => {
+    const ok = matches(rows[i]);
+    tr.hidden = !ok;
+    if (ok) shown++;
+  });
+  $("count").textContent = shown + " de " + rows.length + " filas";
+}
+function clearFilters() {
+  FIELDS.forEach(f => $("f-" + f).value = "");
+  applyFilters();
+}
+
+function render() {
+  const tb = $("tbody");
+  tb.innerHTML = "";
+  rows.forEach((row, i) => {
+    const tr = document.createElement("tr");
+    tr.className = "c-" + catOf(row.estado);
+    FIELDS.forEach(f => {
+      const td = document.createElement("td");
+      const inp = document.createElement("textarea");
+      inp.rows = 1;
+      inp.value = row[f] || "";
+      inp.addEventListener("input", () => {
+        row[f] = inp.value; queueSave();
+        if (f === "estado") tr.className = "c-" + catOf(row.estado);
+      });
+      inp.addEventListener("change", () => { refreshFilters(); applyFilters(); });
+      if (f === "sitio") {
+        const view = document.createElement("div");
+        view.className = "view";
+        const a = document.createElement("a");
+        a.target = "_blank"; a.rel = "noopener noreferrer";
+        const edit = document.createElement("button");
+        edit.textContent = "✎"; edit.title = "Editar enlace";
+        const showEditor = () => { view.hidden = true; inp.hidden = false; };
+        const showLink = () => {
+          const h = hrefOf(row.sitio);
+          if (!h) return showEditor();
+          a.href = h; a.textContent = row.sitio;
+          inp.hidden = true; view.hidden = false;
+        };
+        edit.onclick = () => { showEditor(); inp.focus(); };
+        inp.addEventListener("blur", showLink);
+        view.append(a, edit);
+        td.appendChild(view);
+        showLink();
+      }
+      td.appendChild(inp);
+      tr.appendChild(td);
+    });
+    const td = document.createElement("td");
+    td.className = "del";
+    const b = document.createElement("button");
+    b.textContent = "✕"; b.title = "Eliminar fila";
+    b.onclick = () => { if (confirm("¿Eliminar esta fila?")) { rows.splice(i,1); render(); queueSave(); } };
+    td.appendChild(b); tr.appendChild(td);
+    tb.appendChild(tr);
+  });
+  refreshFilters();
+  applyFilters();
+}
+
+function queueSave() {
+  setStatus("Cambios sin guardar…");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 400);
+}
+
+async function save() {
+  if (!handle) { setStatus("Sin conectar: usa «Exportar copia» o conecta el archivo"); return; }
+  try {
+    // si el archivo cambió fuera de esta página, no pisarlo con la copia en pantalla
+    if ((await handle.getFile()).lastModified !== lastModified) {
+      setStatus("No guardado: el archivo ha cambiado fuera. Pulsa «Recargar del archivo»");
+      return;
+    }
+    const w = await handle.createWritable();
+    await w.write(JSON.stringify(rows, null, 2) + "\n");
+    await w.close();
+    lastModified = (await handle.getFile()).lastModified;
+    setStatus("Guardado " + new Date().toLocaleTimeString());
+  } catch (e) { setStatus("Error al guardar: " + e.message); }
+}
+
+async function load() {
+  const file = await handle.getFile();
+  lastModified = file.lastModified;
+  const text = await file.text();
+  const data = JSON.parse(text || "[]");
+  rows = data.map(r => Object.fromEntries(FIELDS.map(f => [f, r[f] || ""])));
+  render();
+  setStatus("Cargado " + new Date().toLocaleTimeString());
+}
+
+async function connect() {
+  if (!window.showOpenFilePicker) { alert("Este navegador no permite editar archivos locales. Usa Chrome o Edge."); return; }
+  const [h] = await showOpenFilePicker({ types: [{ description: "JSON", accept: { "application/json": [".json"] } }] });
+  if (await h.requestPermission({ mode: "readwrite" }) !== "granted") return;
+  handle = h; await kvSet("handle", h); await load();
+  $("btnOpen").textContent = "Conectado: " + h.name;
+}
+
+$("btnOpen").onclick = () => connect().catch(e => e.name !== "AbortError" && setStatus("Error: " + e.message));
+buildFilters();
+$("btnClear").onclick = clearFilters;
+$("btnAdd").onclick = () => { FIELDS.forEach(f => $("f-" + f).value = ""); rows.push(Object.fromEntries(FIELDS.map(f => [f, ""]))); render(); queueSave(); $("tbody").lastChild.querySelector("textarea").focus(); };
+$("btnReload").onclick = () => handle ? load().catch(e => setStatus("Error: " + e.message)) : setStatus("Sin conectar");
+$("btnExport").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(rows, null, 2)], { type: "application/json" }));
+  a.download = "sitios-copia.json"; a.click();
+};
+
+// al abrir: intentar reconectar con el archivo recordado
+(async () => {
+  const h = await kvGet("handle");
+  if (!h) {
+    // sin archivo conectado: mostrar los datos publicados junto a la página
+    try {
+      const r = await fetch("sitios.json");
+      if (r.ok) { rows = (await r.json()).map(x => Object.fromEntries(FIELDS.map(f => [f, x[f] || ""]))); render(); setStatus("Datos publicados: solo lectura hasta conectar un archivo"); }
+    } catch {}
+    return;
+  }
+  if (await h.queryPermission({ mode: "readwrite" }) === "granted") {
+    handle = h; await load(); $("btnOpen").textContent = "Conectado: " + h.name;
+  } else {
+    $("btnOpen").textContent = "Reconectar con " + h.name;
+    $("btnOpen").onclick = async () => {
+      if (await h.requestPermission({ mode: "readwrite" }) === "granted") {
+        handle = h; await load(); $("btnOpen").textContent = "Conectado: " + h.name;
+      }
+    };
+  }
+})();
+</script>
+</body>
+</html>
