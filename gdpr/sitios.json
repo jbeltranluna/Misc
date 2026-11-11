@@ -77,7 +77,7 @@
     "usuario": "",
     "mail": "hotmail",
     "accion": "solicitar borrado completo de datos",
-    "estado": "pte borrar contraseña de google"
+    "estado": "completado: borrado confirmado y contraseña de Google eliminada"
   },
   {
     "sitio": "https://www.cecotec.es/",
@@ -301,7 +301,7 @@
     "usuario": "",
     "mail": "hotmail",
     "accion": "solicitar borrado completo de datos",
-    "estado": "pte borrar contraseña de google"
+    "estado": "completado: borrado confirmado y contraseña de Google eliminada"
   },
   {
     "sitio": "https://www.getyourguide.com/",
