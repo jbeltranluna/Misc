@@ -77,7 +77,7 @@
     "usuario": "",
     "mail": "hotmail",
     "accion": "solicitar borrado completo de datos",
-    "estado": "solicitado 2026-11-09 a hola@carwow.es; caso 02628834; pidieron confirmar con PIN y respondiste el 2026-11-09; plazo de respuesta hasta 2026-12-09"
+    "estado": "pte borrar contraseña de google"
   },
   {
     "sitio": "https://www.cecotec.es/",
@@ -301,7 +301,7 @@
     "usuario": "",
     "mail": "hotmail",
     "accion": "solicitar borrado completo de datos",
-    "estado": "solicitado 2026-11-09 por formulario de help.fxhome.com; plazo de respuesta hasta 2026-12-09"
+    "estado": "pte borrar contraseña de google"
   },
   {
     "sitio": "https://www.getyourguide.com/",
@@ -309,7 +309,7 @@
     "usuario": "",
     "mail": "hotmail",
     "accion": "solicitar borrado completo de datos",
-    "estado": "solicitado 2026-11-09 a dpo.inbox@getyourguide.com; ticket 23427384; formulario de borrado de su Help Center enviado 2026-11-09; plazo de respuesta hasta 2026-12-09"
+    "estado": "solicitado 2026-11-09 a dpo.inbox@getyourguide.com; ticket 23427384; formulario enviado 2026-11-09; piden confirmar el borrado: botón del mail «Confirm your data deletion request» o respuesta al ticket; plazo de respuesta hasta 2026-12-09"
   },
   {
     "sitio": "https://www.habitissimo.es/",
@@ -381,6 +381,6 @@
     "usuario": "",
     "mail": "hotmail",
     "accion": "solicitar borrado completo de datos",
-    "estado": "solicitado 2026-11-08 a dpo@vertbaudet.com; acuse del DPO, demanda 04801018, sin confirmar el borrado; plazo de respuesta hasta 2026-12-08"
+    "estado": "solicitado 2026-11-08 a dpo@vertbaudet.com; acuse del DPO, demanda 04801018; atención al cliente solo confirmó la baja de newsletters; plazo de respuesta hasta 2026-12-08"
   }
 ]
