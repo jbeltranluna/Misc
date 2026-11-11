@@ -408,14 +408,6 @@
     "estado": ""
   },
   {
-    "sitio": "https://adidas.es/",
-    "descripcion": "Tienda online de Adidas",
-    "usuario": "",
-    "mail": "hotmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
     "sitio": "https://adobe.com/",
     "descripcion": "Cuenta de Adobe (Creative Cloud, Acrobat)",
     "usuario": "",
@@ -916,14 +908,6 @@
     "descripcion": "Hospitales HM: portal del paciente (HM Hospitales)",
     "usuario": "",
     "mail": "gmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "https://thehoffbrand.com/",
-    "descripcion": "Tienda online de zapatillas HOFF",
-    "usuario": "",
-    "mail": "hotmail",
     "accion": "",
     "estado": ""
   },
@@ -1556,8 +1540,8 @@
     "descripcion": "Tienda online de joyería (PDPAOLA)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (support@pdpaola.com, la que da su política para ejercer derechos; SASMAT RETAIL S.L.), pendiente de enviar"
   },
   {
     "sitio": "https://piwebservices.com/",
@@ -2192,14 +2176,6 @@
     "estado": ""
   },
   {
-    "sitio": "android: fr.vinted",
-    "descripcion": "Compraventa de ropa de segunda mano (Vinted)",
-    "usuario": "",
-    "mail": "hotmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
     "sitio": "https://vitalsource.com/",
     "descripcion": "Libros de texto digitales (VitalSource)",
     "usuario": "",
@@ -2228,14 +2204,6 @@
     "descripcion": "Cuenta de trabajo",
     "usuario": "",
     "mail": "",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "android: com.wallapop",
-    "descripcion": "Compraventa de segunda mano (Wallapop)",
-    "usuario": "",
-    "mail": "hotmail",
     "accion": "",
     "estado": ""
   },
