@@ -382,5 +382,13 @@
     "mail": "hotmail",
     "accion": "solicitar borrado completo de datos",
     "estado": "solicitado 2026-11-08 a dpo@vertbaudet.com; acuse del DPO, demanda 04801018; atención al cliente solo confirmó la baja de newsletters; plazo de respuesta hasta 2026-12-08"
+  },
+  {
+    "sitio": "https://link.com/",
+    "descripcion": "Monedero digital de Stripe para pagar en tiendas online guardando tus tarjetas y datos de envío",
+    "usuario": "",
+    "mail": "hotmail",
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (dpo@stripe.com, DPO de Stripe para el EEE según la política de Link; también se puede borrar la cuenta en app.link.com/settings), pendiente de enviar"
   }
 ]
