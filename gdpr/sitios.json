@@ -420,8 +420,8 @@
     "descripcion": "Cuenta de Adobe (Creative Cloud, Acrobat)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (DPO@Adobe.com, Adobe Ireland para la UE), pendiente de enviar"
   },
   {
     "sitio": "https://airbnb.es/",
@@ -660,14 +660,6 @@
     "descripcion": "Tienda online de pequeño electrodoméstico, sin identificar con certeza (Create)",
     "usuario": "",
     "mail": "gmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "https://crunchyroll.com/",
-    "descripcion": "Plataforma de streaming de anime (Crunchyroll)",
-    "usuario": "",
-    "mail": "otro; hotmail",
     "accion": "",
     "estado": ""
   },
@@ -1084,8 +1076,8 @@
     "descripcion": "Buscador de dónde ver películas y series en streaming (JustWatch)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (privacy@justwatch.com; también se puede borrar desde la propia cuenta), pendiente de enviar"
   },
   {
     "sitio": "android: com.keepa.mobile",
@@ -1196,8 +1188,8 @@
     "descripcion": "Herramienta online de diagramas (Lucidchart)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (privacy@lucid.co), pendiente de enviar"
   },
   {
     "sitio": "https://lineadirecta.com/",
@@ -1348,8 +1340,8 @@
     "descripcion": "Web de trabajos y apuntes (Monografias.com)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía de borrado sin localizar; monografias.com no responde (el dominio no resuelve)"
   },
   {
     "sitio": "https://movistar.es/",
@@ -1516,8 +1508,8 @@
     "descripcion": "Cuenta de Oracle",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada: formulario https://www.oracle.com/legal/data-privacy-inquiry-form/ ; la cuenta se borra sola tras 18 meses sin iniciar sesión"
   },
   {
     "sitio": "https://orange.es/",
@@ -1596,16 +1588,8 @@
     "descripcion": "Plataforma de podcasts y audiolibros (Podimo)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "https://pornhub.com/",
-    "descripcion": "Web de contenido para adultos (Pornhub)",
-    "usuario": "",
-    "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (hello@podimo.com, en su política de privacidad), pendiente de enviar"
   },
   {
     "sitio": "https://porquetuvuelves.com/",
@@ -1628,8 +1612,8 @@
     "descripcion": "Herramienta para probar APIs (Postman)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (privacy@postman.com), pendiente de enviar"
   },
   {
     "sitio": "https://premiosalainnovacion.es/",
@@ -1644,8 +1628,8 @@
     "descripcion": "Preparación de entrevistas de consultoría (PrepLounge)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (contact@preplounge.com, CC privacy@preplounge.com; también desde Login and Security del perfil), pendiente de enviar"
   },
   {
     "sitio": "https://protonmail.com/",
@@ -1760,14 +1744,6 @@
     "estado": ""
   },
   {
-    "sitio": "https://rtve.es/",
-    "descripcion": "Cuenta de RTVE Play",
-    "usuario": "",
-    "mail": "hotmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
     "sitio": "android: com.ryanair.cheapflights",
     "descripcion": "Aerolínea de bajo coste (Ryanair)",
     "usuario": "",
@@ -1796,8 +1772,8 @@
     "descripcion": "Biblioteca digital de libros, audiolibros y documentos por suscripción (Scribd)",
     "usuario": "",
     "mail": "gmail; hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (privacy@scribd.com, Scribd Netherlands BV para la UE; la cuenta está con Hotmail y Gmail), pendiente de enviar"
   },
   {
     "sitio": "https://seg-social.gob.es/",
@@ -1844,8 +1820,8 @@
     "descripcion": "Banco de imágenes (Shutterstock)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (privacy@shutterstock.com, DPO del grupo; su política en inglés remite también a un formulario), pendiente de enviar"
   },
   {
     "sitio": "https://simyo.es/",
@@ -2044,8 +2020,8 @@
     "descripcion": "Banco de iconos (The Noun Project)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (info@thenounproject.com, la que da su política para borrar la cuenta), pendiente de enviar"
   },
   {
     "sitio": "https://ticketea.com/",
@@ -2164,8 +2140,8 @@
     "descripcion": "Tienda de recursos de diseño de interfaces (UI8)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (support@ui8.net, única dirección de su política), pendiente de enviar"
   },
   {
     "sitio": "(oculto: cuenta de trabajo)",
@@ -2268,8 +2244,8 @@
     "descripcion": "Servicio para convertir webs en apps (WebIntoApp)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (webintoapp@gmail.com, la que da su política), pendiente de enviar"
   },
   {
     "sitio": "https://westwing.es/",
