@@ -609,11 +609,11 @@
   },
   {
     "sitio": "android: com.clubvips.app",
-    "descripcion": "Club de fidelización de los restaurantes del grupo VIPS (Club VIPS)",
+    "descripcion": "App de fidelización Club by (antes Club VIPS) de los restaurantes VIPS, Foster's Hollywood, Ginos y TGI Fridays (grupo Alsea)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (dpd@alsea.net y bajasclubby@alsea.net, en la política de clubby.es), pendiente de enviar"
   },
   {
     "sitio": "https://cmed-online.com/",
@@ -748,14 +748,6 @@
     "descripcion": "Web sin identificar con certeza (Elas de las Carnes)",
     "usuario": "",
     "mail": "gmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "https://ea.com/",
-    "descripcion": "Cuenta de Electronic Arts",
-    "usuario": "",
-    "mail": "hotmail",
     "accion": "",
     "estado": ""
   },
@@ -1020,14 +1012,6 @@
     "descripcion": "Tienda online de lencería Intimissimi",
     "usuario": "",
     "mail": "gmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "android: com.integrapark.iparkmerel",
-    "descripcion": "App de aparcamiento regulado de Integra Parking, la empresa de Blinkay (iParkMe (Integra Parking))",
-    "usuario": "",
-    "mail": "hotmail",
     "accion": "",
     "estado": ""
   },
@@ -1356,8 +1340,8 @@
     "descripcion": "Club de bebés de Nestlé (Nestlé Bebé)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (protecciondedatos@nestle.es, en su política de privacidad), pendiente de enviar"
   },
   {
     "sitio": "https://netflix.com/",
@@ -1396,8 +1380,8 @@
     "descripcion": "Cuenta de NordVPN",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (privacy@nordaccount.com, en su política de privacidad), pendiente de enviar"
   },
   {
     "sitio": "https://nuevosvecinos.com/",
@@ -1460,14 +1444,6 @@
     "descripcion": "Web sin identificar con certeza (open.com)",
     "usuario": "",
     "mail": "",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "https://openai.com/",
-    "descripcion": "Cuenta de OpenAI (ChatGPT)",
-    "usuario": "",
-    "mail": "hotmail",
     "accion": "",
     "estado": ""
   },
@@ -1585,11 +1561,11 @@
   },
   {
     "sitio": "https://premiosalainnovacion.es/",
-    "descripcion": "Web sin identificar con certeza (Premios a la Innovación)",
+    "descripcion": "Premios a la Innovación de Carrefour, votación de productos nuevos (Centros Comerciales Carrefour)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada: formulario de privacidad de Carrefour (carrefour.es/privacidad) o correo postal a Carrefour, apartado 1002, 28108 Alcobendas"
   },
   {
     "sitio": "https://preplounge.com/",
@@ -1689,11 +1665,11 @@
   },
   {
     "sitio": "https://ritaanddeer.com/",
-    "descripcion": "Web sin identificar con certeza (Rita and Deer)",
+    "descripcion": "Tienda online de bolsos para carro de bebé y accesorios (Rita & Deer)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (info@ritaanddeer.com, en su política de privacidad), pendiente de enviar"
   },
   {
     "sitio": "android: com.yunshi.robotlife",
@@ -2196,8 +2172,8 @@
     "descripcion": "Rutas de senderismo y outdoor (Wikiloc)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (support@wikiloc.com, única dirección de su política), pendiente de enviar"
   },
   {
     "sitio": "android: com.windscribe.vpn",
@@ -2308,8 +2284,8 @@
     "descripcion": "App que analiza la composición de alimentos y cosméticos (Yuka)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (dpo@yuka.io, en su centro de ayuda), pendiente de enviar"
   },
   {
     "sitio": "https://zalando.com/",
