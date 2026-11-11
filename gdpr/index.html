@@ -40,6 +40,9 @@
   .view a { flex:1; min-width:0; color:var(--acc); overflow-wrap:anywhere; }
   .view button { border:none; background:none; color:var(--muted); padding:0 2px; }
   .view button:hover { color:var(--acc); }
+  td.chk { text-align:center; }
+  td.chk input { width:18px; height:18px; margin:8px 0 0; cursor:pointer; accent-color:#e03131; }
+  tr.marcada td { outline:1px solid color-mix(in srgb, #e03131 45%, transparent); outline-offset:-1px; }
 </style>
 </head>
 <body>
@@ -52,6 +55,7 @@
   <button id="btnReload">Recargar del archivo</button>
   <button id="btnExport">Exportar copia</button>
   <button id="btnClear">Limpiar filtros</button>
+  <button id="btnCopy">Copiar marcadas</button>
   <span id="status">Sin conectar</span>
 </div>
 
@@ -60,7 +64,7 @@
 <div class="wrap">
 <table>
   <thead><tr>
-    <th style="width:12%">Sitio</th><th style="width:34%">Descripción del sitio</th><th style="width:7%">Usuario</th><th style="width:15%">Mail</th><th style="width:12%">Acción</th><th>Estado</th><th style="width:36px"></th>
+    <th style="width:44px" title="Marcar para borrar">Borrar</th><th style="width:12%">Sitio</th><th style="width:34%">Descripción del sitio</th><th style="width:7%">Usuario</th><th style="width:15%">Mail</th><th style="width:12%">Acción</th><th>Estado</th><th style="width:36px"></th>
   </tr><tr class="filters" id="filters"></tr></thead>
   <tbody id="tbody"></tbody>
 </table>
@@ -85,6 +89,15 @@ const idb = () => new Promise((res, rej) => {
 });
 async function kvGet(k) { try { const db = await idb(); return await new Promise(res => { const q = db.transaction("kv").objectStore("kv").get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(null); }); } catch { return null; } }
 async function kvSet(k, v) { try { const db = await idb(); db.transaction("kv","readwrite").objectStore("kv").put(v, k); } catch {} }
+
+const toRow = r => ({ ...Object.fromEntries(FIELDS.map(f => [f, r[f] || ""])), borrar: !!r.borrar });
+
+// --- marcas «para borrar»: con archivo conectado van a sitios.json; sin archivo, a este navegador
+const MKEY = "gdpr-borrar";
+const keyOf = r => r.sitio + "|" + r.descripcion;
+function marksGet() { try { return new Set(JSON.parse(localStorage.getItem(MKEY) || "[]")); } catch { return new Set(); } }
+function marksSave() { try { localStorage.setItem(MKEY, JSON.stringify(rows.filter(r => r.borrar).map(keyOf))); } catch {} }
+function applyStoredMarks() { const m = marksGet(); rows.forEach(r => { if (m.has(keyOf(r))) r.borrar = true; }); }
 
 const norm = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
@@ -119,6 +132,12 @@ const FILTER_TYPE = { sitio:"text", descripcion:"text", usuario:"text", mail:"va
 const EMPTY = "__vacio__";
 function buildFilters() {
   const tr = $("filters");
+  const thB = document.createElement("th");
+  const sB = document.createElement("select");
+  sB.id = "f-borrar";
+  [["", "Todas"], ["si", "Marcadas"], ["no", "Sin marcar"]].forEach(([v, t]) => sB.add(new Option(t, v)));
+  sB.addEventListener("input", applyFilters);
+  thB.appendChild(sB); tr.appendChild(thB);
   FIELDS.forEach(f => {
     const th = document.createElement("th");
     const c = document.createElement(FILTER_TYPE[f] === "text" ? "input" : "select");
@@ -157,6 +176,8 @@ function refreshFilters() {
   lg.appendChild(cnt);
 }
 function matches(row) {
+  const b = $("f-borrar").value;
+  if (b && (b === "si") !== row.borrar) return false;
   return FIELDS.every(f => {
     const v = $("f-" + f).value;
     if (!v) return true;
@@ -172,9 +193,10 @@ function applyFilters() {
     tr.hidden = !ok;
     if (ok) shown++;
   });
-  $("count").textContent = shown + " de " + rows.length + " filas";
+  $("count").textContent = shown + " de " + rows.length + " filas · " + rows.filter(r => r.borrar).length + " marcadas para borrar";
 }
 function clearFilters() {
+  $("f-borrar").value = "";
   FIELDS.forEach(f => $("f-" + f).value = "");
   applyFilters();
 }
@@ -185,6 +207,18 @@ function render() {
   rows.forEach((row, i) => {
     const tr = document.createElement("tr");
     tr.className = "c-" + catOf(row.estado);
+    tr.classList.toggle("marcada", row.borrar);
+    const tdC = document.createElement("td");
+    tdC.className = "chk";
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.checked = row.borrar; cb.title = "Marcar para borrar";
+    cb.addEventListener("change", () => {
+      row.borrar = cb.checked;
+      tr.classList.toggle("marcada", row.borrar);
+      if (handle) queueSave(); else marksSave();
+      applyFilters();
+    });
+    tdC.appendChild(cb); tr.appendChild(tdC);
     FIELDS.forEach(f => {
       const td = document.createElement("td");
       const inp = document.createElement("textarea");
@@ -192,7 +226,7 @@ function render() {
       inp.value = row[f] || "";
       inp.addEventListener("input", () => {
         row[f] = inp.value; queueSave();
-        if (f === "estado") tr.className = "c-" + catOf(row.estado);
+        if (f === "estado") { tr.className = "c-" + catOf(row.estado); tr.classList.toggle("marcada", row.borrar); }
       });
       inp.addEventListener("change", () => { refreshFilters(); applyFilters(); });
       if (f === "sitio") {
@@ -257,7 +291,7 @@ async function load() {
   lastModified = file.lastModified;
   const text = await file.text();
   const data = JSON.parse(text || "[]");
-  rows = data.map(r => Object.fromEntries(FIELDS.map(f => [f, r[f] || ""])));
+  rows = data.map(toRow);
   render();
   setStatus("Cargado " + new Date().toLocaleTimeString());
 }
@@ -273,7 +307,14 @@ async function connect() {
 $("btnOpen").onclick = () => connect().catch(e => e.name !== "AbortError" && setStatus("Error: " + e.message));
 buildFilters();
 $("btnClear").onclick = clearFilters;
-$("btnAdd").onclick = () => { FIELDS.forEach(f => $("f-" + f).value = ""); rows.push(Object.fromEntries(FIELDS.map(f => [f, ""]))); render(); queueSave(); $("tbody").lastChild.querySelector("textarea").focus(); };
+$("btnCopy").onclick = async () => {
+  const sel = rows.filter(r => r.borrar);
+  if (!sel.length) { setStatus("No hay ninguna marcada"); return; }
+  const txt = sel.map(r => "- " + r.descripcion + " — " + r.sitio).join("\n");
+  try { await navigator.clipboard.writeText(txt); setStatus(sel.length + " marcadas copiadas: pégalas en el chat"); }
+  catch { prompt("Copia este texto:", txt); }
+};
+$("btnAdd").onclick = () => { $("f-borrar").value = ""; FIELDS.forEach(f => $("f-" + f).value = ""); rows.push(toRow({})); render(); queueSave(); $("tbody").lastChild.querySelector("textarea").focus(); };
 $("btnReload").onclick = () => handle ? load().catch(e => setStatus("Error: " + e.message)) : setStatus("Sin conectar");
 $("btnExport").onclick = () => {
   const a = document.createElement("a");
@@ -288,7 +329,7 @@ $("btnExport").onclick = () => {
     // sin archivo conectado: mostrar los datos publicados junto a la página
     try {
       const r = await fetch("sitios.json");
-      if (r.ok) { rows = (await r.json()).map(x => Object.fromEntries(FIELDS.map(f => [f, x[f] || ""]))); render(); setStatus("Datos publicados: solo lectura hasta conectar un archivo"); }
+      if (r.ok) { rows = (await r.json()).map(toRow); applyStoredMarks(); render(); setStatus("Datos publicados: marca las casillas y pulsa «Copiar marcadas»"); }
     } catch {}
     return;
   }
