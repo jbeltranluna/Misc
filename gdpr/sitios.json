@@ -896,14 +896,6 @@
     "estado": ""
   },
   {
-    "sitio": "android: com.hama.smart",
-    "descripcion": "App de dispositivos domésticos inteligentes Hama (Hama Smart Home)",
-    "usuario": "",
-    "mail": "hotmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
     "sitio": "https://hmhospitales.com/",
     "descripcion": "Hospitales HM: portal del paciente (HM Hospitales)",
     "usuario": "",
@@ -1196,8 +1188,8 @@
     "descripcion": "App para hacer planos de viviendas (magicplan)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (support@magicplan.app, CC security@magicplan.app, equipo de protección de datos), pendiente de enviar"
   },
   {
     "sitio": "https://maisonsdumonde.com/",
@@ -1252,14 +1244,6 @@
     "descripcion": "Tienda de electrónica MediaMarkt",
     "usuario": "",
     "mail": "gmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "https://melcloud.com/",
-    "descripcion": "Control remoto del aire acondicionado Mitsubishi Electric (MELCloud (Mitsubishi))",
-    "usuario": "",
-    "mail": "hotmail",
     "accion": "",
     "estado": ""
   },
@@ -1712,34 +1696,18 @@
     "estado": ""
   },
   {
-    "sitio": "android: com.roborock.smart",
-    "descripcion": "App de robots aspiradores Roborock",
-    "usuario": "",
-    "mail": "hotmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
     "sitio": "android: com.yunshi.robotlife",
-    "descripcion": "App de robots aspiradores, sin identificar con certeza (Robot Life)",
+    "descripcion": "App de los robots aspiradores Lefant (Robot Life)",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada (support.eu@lefant.com, soporte europeo de Lefant según Google Play; su política no da dirección), pendiente de enviar"
   },
   {
     "sitio": "android: com.ryanair.cheapflights",
     "descripcion": "Aerolínea de bajo coste (Ryanair)",
     "usuario": "",
     "mail": "gmail",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "https://samsung.com/",
-    "descripcion": "Cuenta Samsung para dispositivos, servicios y soporte técnico",
-    "usuario": "",
-    "mail": "hotmail",
     "accion": "",
     "estado": ""
   },
@@ -1844,14 +1812,6 @@
     "descripcion": "Plataforma de streaming SkyShowtime",
     "usuario": "",
     "mail": "otro",
-    "accion": "",
-    "estado": ""
-  },
-  {
-    "sitio": "android: com.tuya.smartlife",
-    "descripcion": "App para dispositivos domóticos (Smart Life (Tuya))",
-    "usuario": "",
-    "mail": "hotmail",
     "accion": "",
     "estado": ""
   },
@@ -2324,8 +2284,8 @@
     "descripcion": "Cuenta Xiaomi para móviles y dispositivos del hogar conectados",
     "usuario": "",
     "mail": "hotmail",
-    "accion": "",
-    "estado": ""
+    "accion": "solicitar borrado completo de datos",
+    "estado": "vía localizada: formulario https://privacy.mi.com/support (Xiaomi Technology Netherlands B.V.) o borrar la cuenta en account.xiaomi.com; pendiente"
   },
   {
     "sitio": "https://xiaomi.eu/",
